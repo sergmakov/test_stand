@@ -1,0 +1,35 @@
+.token{
+  padding: 0 5px;
+  margin: 0 2px;
+  cursor: pointer;
+  border: 1px solid white;
+}
+
+.active-token {
+  border: 1px solid black;
+}
+
+.dependent-on-active{
+  border: 1px dashed black;
+}
+
+.part-UNKNOWN {}
+.part-ADJ	{
+  background-color: #E6E6FA;
+}
+.part-ADP	{}
+.part-ADV	{}
+.part-CONJ {}
+.part-DET	{}
+.part-NOUN {
+  background-color: #F0FFF0;
+}
+.part-NUM	{}
+.part-PRON {}
+.part-PRT {}
+.part-PUNCT	{}
+.part-VERB {
+  background-color: #FFE4E1;
+}
+.part-X	{}
+.part-AFFIX	{}

@@ -1,5 +1,26 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
+import classnames from 'classnames';
+
+
+const example = 'Application development for a marketplace';
+
+const partsOfSpeach = {
+  'UNKNOWN':	'Unknown',
+  'ADJ':	'Прилагательное',
+  'ADP':	'Предлог',
+  'ADV':	'Наречие',
+  'CONJ':	'Союз',
+  'DET':	'Determiner',
+  'NOUN':	'Существительное',
+  'NUM':	'Числительное',
+  'PRON':	'Местоимение',
+  'PRT':	'Particle or other function word',
+  'PUNCT':	'Punctuation',
+  'VERB':	'Глагол',
+  'X':	'Other: foreign words, typos, abbreviations',
+  'AFFIX':	'Affix',
+}
 
 export default class Blog extends Component{
 
@@ -31,19 +52,55 @@ export default class Blog extends Component{
       });
   }
 
+  onTokenClick(idx) {
+    this.setState({
+      activeToken: idx,
+    });
+  }
+
   renderToken(token, idx) {
+    const { activeToken } = this.state;
+    const classNames = classnames('token', `part-${token.partOfSpeech.tag}`, {
+      'active-token': activeToken === idx,
+      'dependent-on-active': token.dependencyEdge.headTokenIndex === activeToken && activeToken !== idx,
+    });
     return (
-      <span key={idx}>{token.text.content}({token.dependencyEdge.label})</span>
+      <span key={idx} className={classNames} onClick={() => {this.onTokenClick(idx)} }>
+        {token.text.content}
+      </span>
     );
   }
 
-  render() {
+  renderResults() {
+    if(!this.state.data) {
+      return null;
+    }
     const tokens = this.state.data.tokens || [];
+
+    return (
+      <div className="row">
+        <div className="col-sm-12">
+          <h3>Results</h3>
+          {tokens.map((token, idx) => this.renderToken(token, idx))}
+        </div>
+      </div>
+    )
+  }
+
+  render() {
     return (
       <div>
-        <textarea ref="textarea"></textarea>
-        <button onClick={this.requestData.bind(this)}>Reuqest</button>
-        <p>{tokens.map((token, idx) => this.renderToken(token, idx))}</p>
+        <h1>CLOUD NATURAL LANGUAGE</h1>
+        <div className="row">
+          <div className="col-sm-8">
+            <h3>Source text</h3>
+            <textarea ref="textarea" className="form-control" defaultValue={example}></textarea>
+          </div>
+          <div className="col-sm-4">
+            <button className="btn btn-primary" onClick={this.requestData.bind(this)}>Analyze</button>
+          </div>
+        </div>
+        {this.renderResults()}
       </div>
     );
   }
