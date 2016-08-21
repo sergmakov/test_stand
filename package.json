@@ -1,0 +1,33 @@
+{
+  "name": "react_blog1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "start.js",
+  "dependencies": {
+    "babel": "^6.3.26",
+    "babel-core": "^6.4.5",
+    "babel-eslint": "^6.0.3",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "connect": "^3.4.0",
+    "eslint": "^2.8.0",
+    "eslint-plugin-react": "^3.16.1",
+    "jquery": "^3.1.0",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "react-localstorage": "^0.2.8",
+    "serve-static": "^1.10.1",
+    "webpack": "^1.12.11"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --progress --inline --hot",
+    "api": "node start"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-react-hmre": "^1.1.1",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
