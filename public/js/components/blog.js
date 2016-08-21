@@ -92,8 +92,10 @@ export default class Blog extends Component{
       <div>
         <h1>CLOUD NATURAL LANGUAGE</h1>
         <div className="row">
-          <div className="col-sm-8">
+          <div className="col-sm-12">
             <h3>Source text</h3>
+          </div>
+          <div className="col-sm-8">
             <textarea ref="textarea" className="form-control" defaultValue={example}></textarea>
           </div>
           <div className="col-sm-4">
