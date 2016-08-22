@@ -33,3 +33,16 @@
 }
 .part-X	{}
 .part-AFFIX	{}
+
+.legend p {
+  cursor: pointer;
+}
+
+.legend .active {
+  border: 1px solid black;
+}
+
+.legend .disabled {
+  opacity: 0.5;
+  cursor: auto;
+}
