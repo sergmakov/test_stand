@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import classnames from 'classnames';
 import Legend from './legend';
+import Token from './token';
 
 const example = `
 — Cross-browser HTML, CSS/LESS, OOP JavaScript — 2+ years of experience.
@@ -49,6 +50,7 @@ export default class Blog extends Component{
     this.state = {
       data: {},
       highlightPartsOfSpeech: false,
+      activeToken: null,
     };
   }
 
@@ -86,22 +88,18 @@ export default class Blog extends Component{
     });
   }
 
-  renderToken(token, idx) {
-    const { activeToken, highlightPartsOfSpeech } = this.state;
-    const partOfSpeechClass = highlightPartsOfSpeech ? `part-${token.partOfSpeech.tag}` : '';
-
-    const classNames = classnames('token', partOfSpeechClass, {
-      'active-token': activeToken === idx,
-      'dependent-on-active': token.dependencyEdge.headTokenIndex === activeToken && activeToken !== idx,
-    });
-
-    const newLine = token.text.content === '.' ? <br /> : null;
+  renderToken(info, idx) {
+    const { activeToken, highlightPartsOfSpeech, data } = this.state;
     return (
-      <span key={idx} className={classNames} onClick={() => {this.onTokenClick(idx)} }>
-        {token.text.content}
-        {newLine}
-      </span>
-    );
+      <Token
+        key={idx}
+        idx={idx}
+        data={data}
+        activeToken={activeToken}
+        highlightPartsOfSpeech={highlightPartsOfSpeech}
+        onTokenClick={this.onTokenClick.bind(this)}
+      />
+    )
   }
 
   renderResults() {
@@ -141,6 +139,7 @@ export default class Blog extends Component{
           highlightPartsOfSpeech={this.state.highlightPartsOfSpeech}
           onHighlightPartsOfSpeechChange={this.onHighlightPartsOfSpeechChange.bind(this)}
           onTokenClick={this.onTokenClick.bind(this)}
+          activeToken={this.state.activeToken}
         />
       </div>
     );

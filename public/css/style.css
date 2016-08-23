@@ -9,8 +9,12 @@
   border: 1px solid black;
 }
 
-.dependent-on-active{
+.child-of-active{
   border: 1px dashed black;
+}
+
+.parent-of-active{
+  border: 3px double black;
 }
 
 .part-UNKNOWN {}

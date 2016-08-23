@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 import constants from '../constants/nlp';
 import classnames from 'classnames';
+import Token from './token';
+import utils from '../utils/utils';
 
 const { PARTS_OF_SPEECH, REFERENCES } = constants;
+const { getPartOfSpeech, getReferenceType, getReferencedIdx } = utils;
 
-function getPartOfSpeech(token) {
-  return  token && token.partOfSpeech && token.partOfSpeech.tag;
-}
-
-function getReferenceType(token) {
-  return  token && token.dependencyEdge && token.dependencyEdge.label;
-}
-
-function getReferencedIdx(token) {
-  return  token && token.dependencyEdge && token.dependencyEdge.headTokenIndex;
-}
 
 export default class Legend extends Component{
   constructor(props) {
@@ -134,7 +126,7 @@ export default class Legend extends Component{
 
   renderLegendTagExamples() {
     const { activeLegendItem, activeLegendColumn } = this.state;
-    const { data, onTokenClick } = this.props;
+    const { data, onTokenClick, activeToken, highlightPartsOfSpeech } = this.props;
     if (!activeLegendItem || !data.tokens) {
       return null;
     }
@@ -142,22 +134,47 @@ export default class Legend extends Component{
     let rows;
     if (activeLegendColumn === PARTS_OF_SPEECH) {
       const tokens = data.tokens.filter(token => token.partOfSpeech.tag === activeLegendItem);
-      rows = tokens.map(token => (
-          <p onClick={() => {onTokenClick(data.tokens.indexOf(token))}}>
-            {token.text.content}
-          </p>
-        )
+      rows = tokens.map(info => {
+          const idx = data.tokens.indexOf(info);
+          return (
+            <p>
+              <Token
+                key={idx}
+                idx={idx}
+                info={info}
+                activeToken={activeToken}
+                highlightPartsOfSpeech={highlightPartsOfSpeech}
+                onTokenClick={onTokenClick}
+              />
+            </p>
+          )
+        }
       );
     } else if (activeLegendColumn === REFERENCES) {
       const tokens = data.tokens.filter(token => token.dependencyEdge.label === activeLegendItem);
-      rows = tokens.map((token) => {
-        const referenceTokentIdx = token.dependencyEdge.headTokenIndex;
+      rows = tokens.map((info, exampleIdx) => {
+        const referenceTokentIdx = info.dependencyEdge.headTokenIndex;
         const referencedToken = data.tokens[referenceTokentIdx];
+        const idx = data.tokens.indexOf(info);
         return (
-          <p>
-            <span onClick={() => {onTokenClick(referenceTokentIdx)}}>{referencedToken.text.content}</span>
+          <p key={exampleIdx}>
+            <Token
+              key={idx}
+              idx={idx}
+              data={data}
+              activeToken={activeToken}
+              highlightPartsOfSpeech={highlightPartsOfSpeech}
+              onTokenClick={onTokenClick}
+            />
             &nbsp;->&nbsp;
-            <span onClick={() => {onTokenClick(data.tokens.indexOf(token))}}>{token.text.content}</span>
+            <Token
+              key={referenceTokentIdx}
+              idx={referenceTokentIdx}
+              data={data}
+              activeToken={activeToken}
+              highlightPartsOfSpeech={highlightPartsOfSpeech}
+              onTokenClick={onTokenClick}
+            />
           </p>
         )
       });
@@ -178,4 +195,5 @@ Legend.propTypes = {
   highlightPartsOfSpeech: React.PropTypes.bool,
   onHighlightPartsOfSpeechChange: React.PropTypes.func,
   onTokenClick: React.PropTypes.func,
+  activeToken: React.PropTypes.number,
 }
